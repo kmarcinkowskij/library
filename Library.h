@@ -4,7 +4,7 @@
 
 #ifndef LIBRARY_H
 #define LIBRARY_H
-#include <set>
+
 #include <vector>
 
 #include "book/Book.h"
