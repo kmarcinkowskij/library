@@ -1,0 +1,3 @@
+/Users/konrad/Documents/projects/cpp/zadania/biblioteka/cmake-build-debug/CMakeFiles/biblioteka.dir
+/Users/konrad/Documents/projects/cpp/zadania/biblioteka/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/konrad/Documents/projects/cpp/zadania/biblioteka/cmake-build-debug/CMakeFiles/rebuild_cache.dir
