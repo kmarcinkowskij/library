@@ -27,17 +27,17 @@ void Library::getRented() const {
         std::cout <<std::get<1>(i) << " rented " << std::get<0>(i)<<"\n";
     }
 }
-void printToRented(const std::string &v_ULID, const int32_t &_reader_id) {
+void printToRented(const std::string &v_ULID, const char &_current_state) {
     int32_t line_number = Utilities::find_book_with_ULID(v_ULID);
     int32_t counter = 0;
     std::ifstream input("books.csv");
     std::string line;
     while(std::getline(input, line)) {
         // std::cout << "book number: " << line_number << ", current number: " << counter <<  ", line: "<< line<<"\n";
-        if(counter == line_number && line[static_cast<int32_t>(line.size())-2] != '0') {
+        if(counter == line_number && line[static_cast<int32_t>(line.size())-2] != _current_state) {
             // std::cout << "found the correct book: " << line<<"\n";
             std::string new_line = line;
-            new_line[static_cast<int32_t>(line.size())-2] = '0';
+            new_line[static_cast<int32_t>(line.size())-2] = _current_state;
             Utilities::change_line_in_file(counter, "books.csv", new_line);
         }
         counter++;
@@ -51,7 +51,7 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
         }
     }
     std::ofstream rented("rented_books.csv", std::ios_base::app);
-    printToRented(v_ULID, _reader_id);
+    printToRented(v_ULID, '0');
     rented << v_ULID + ',' + std::to_string(_reader_id);
 
     for(std::tuple<std::string, int32_t> &rented: this->rented_books) {
@@ -62,15 +62,7 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
 
     }
     rented_books.emplace_back(v_ULID, _reader_id);
-
-
-
-
-
-
-
 }
-
 
 void Library::readRented() {
     std::ifstream input_file("rented_books.csv");
@@ -91,7 +83,7 @@ void Library::readRented() {
         }
         this->rented_books.emplace_back(rented_data[0], stoi(rented_data[1]));
         counter = 0;
-        printToRented(rented_data[0], std::stoi(rented_data[1]));
+        printToRented(rented_data[0], '0');
     }
 
 
@@ -101,11 +93,31 @@ void Library::changeRented(const std::string &v_ULID, const int32_t &_reader_id)
     int counter = 0;
     for(auto i: this->rented_books) {
         if(std::get<0>(i) == v_ULID) {
-            std::get<1>(i) == _reader_id;
+            std::get<1>(i) = _reader_id;
             Utilities::change_line_in_file(counter, "rented_books.csv", v_ULID + ',' + std::to_string(_reader_id));
         }
         counter++;
     }
+
+}
+
+void Library::removeRented(const std::string &v_ULID) {
+    int32_t counter = 0;
+    for(auto i: this->rented_books) {
+        if(std::get<0>(i) == v_ULID) {
+            this->rented_books.erase(rented_books.begin() + counter);\
+            Utilities::remove_line_in_file(counter, "rented_books.csv");
+            printToRented(v_ULID, '1');
+        }
+        counter++;
+    }
+}
+
+void Library::resetRented() {
+    for(const std::unique_ptr<Book> &book: this->books) {
+        printToRented(book->getULID(), '1');
+    }
+    this->rented_books.clear();
 
 }
 

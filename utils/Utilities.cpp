@@ -34,6 +34,24 @@ void Utilities::change_line_in_file(const int32_t &_line_number, const std::stri
     std::rename("temp.csv", _file_dir.c_str());
 }
 
+void Utilities::remove_line_in_file(const int &_line_number, const std::string &_file_dir) {
+    std::ifstream input_file(_file_dir);
+    std::ofstream target_file("temp.csv");
+    int32_t counter = 0;
+    std::string line;
+    while(std::getline(input_file, line)) {
+        if(counter == _line_number) {
+            counter++;
+        } else {
+            target_file << line << "\n";
+            counter++;
+        }
+    }
+
+    std::remove(_file_dir.c_str());
+    std::rename("temp.csv", _file_dir.c_str());
+}
+
 int32_t Utilities::find_book_with_ULID(const std::string &v_ulid) {
     std::ifstream input("books.csv");
     std::string line;

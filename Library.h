@@ -30,7 +30,8 @@ public:
     void readRented();
 
     void changeRented(const std::string &v_ULID, const int32_t &_reader_id);
-    void removeRented((const std::string &v_ULID, const int32_t &_reader_id);
+    void removeRented(const std::string &v_ULID);
+    void resetRented();
 
 };
 
