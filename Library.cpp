@@ -28,6 +28,8 @@ void Library::getRented() {
     }
 }
 void Library::printToRented(const std::string &v_ULID, const char &_current_state) {
+
+
     const int32_t line_number = std::get<0>(this->find_book_with_ULID(v_ULID));
     int32_t counter = 0;
     std::ifstream input("books.csv");
@@ -50,6 +52,11 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
             return;
         }
     }
+    for(const std::unique_ptr<Book> &book: this->books) {
+        if(book->getULID() == v_ULID) {
+            book->setAvailability(false);
+        }
+    }
     std::ofstream rented("rented_books.csv", std::ios_base::app);
     printToRented(v_ULID, '0');
     rented << v_ULID + ',' + std::to_string(_reader_id) + '\n';
@@ -62,11 +69,7 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
         }
     }
 
-    for(const std::unique_ptr<Book> &book: this->books) {
-        if(book->getULID() == v_ULID) {
-            book->setAvailability(true);
-        }
-    }
+
     rented.close();
     rented_books.emplace_back(v_ULID, _reader_id);
 }

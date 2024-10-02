@@ -37,6 +37,7 @@ void Control::run_lib() {
                 do {
                     std::cin >> ULID;
                     std::cin >> reader_id;
+
                     if(std::get<0>(lib->find_book_with_ULID(ULID)) == -1) {
                         std::cerr << "book not found, are you sure it exists?\n";
                     }
