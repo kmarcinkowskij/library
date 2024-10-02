@@ -53,10 +53,10 @@ void Control::run_lib() {
                 std::cout << "please input the ULID of the book in question";
                 do {
                     std::cin >> ULID;
-                    if(lib->find_book_in_rented(ULID) != -1) {
+                    if(lib->find_book_in_rented(ULID) == -1) {
                         std::cerr << "rented book not found, are you sure it exists?\n";
                     }
-                }while(lib->find_book_in_rented(ULID) != -1);
+                }while(lib->find_book_in_rented(ULID) == -1);
                 lib->removeRented(ULID);
                 break;
             }
