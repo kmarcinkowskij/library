@@ -32,6 +32,8 @@ void Utilities::change_line_in_file(const int32_t &_line_number, const std::stri
 
     std::remove(_file_dir.c_str());
     std::rename("temp.csv", _file_dir.c_str());
+    input_file.close();
+    target_file.close();
 }
 
 void Utilities::remove_line_in_file(const int &_line_number, const std::string &_file_dir) {
@@ -68,12 +70,14 @@ int32_t Utilities::find_book_with_ULID(const std::string &v_ulid) {
 
         }
         if(book_data[1] == v_ulid) {
+            input.close();
             return line_counter;
         }
 
         line_counter++;
         counter = 0;
     }
+    input.close();
     return -1;
 }
 

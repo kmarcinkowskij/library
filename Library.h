@@ -25,6 +25,8 @@ public:
     void addReader(const int32_t &_id, const std::string &_name);
     void addRented(const std::string &v_ULID, const int32_t &_reader_id);
 
+    void init();
+
     void readBooks();
     void readReaders();
     void readRented();

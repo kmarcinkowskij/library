@@ -16,6 +16,7 @@ public:
     enum book_types { AUDIOBOOK, EBOOK, PAPERBACK, UNKNOWN_BOOK_TYPE};
     inline static const std::map<std::string,book_types> types_map{{"audiobook",AUDIOBOOK}, {"ebook",EBOOK}, {"paperback",PAPERBACK}};
     inline static const std::map<int,paperback_cover_type> cover_map{{0,HARD}, {1,SOFT}};
+    inline static const std::map<std::string,bool> choice_map{{"y",true}, {"yes",true}, {"t", true}, {"tak", true}, {"1", true}, {"n", false}, {"no", false}, {"nie", false}, {"0", false}};
     Utilities()= default;
 
     static book_types convert_string_to_book_types(const std::string &_string);

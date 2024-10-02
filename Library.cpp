@@ -53,15 +53,23 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
     std::ofstream rented("rented_books.csv", std::ios_base::app);
     printToRented(v_ULID, '0');
     rented << v_ULID + ',' + std::to_string(_reader_id);
+    rented.close();
 
-    for(std::tuple<std::string, int32_t> &rented: this->rented_books) {
-        if(std::get<0>(rented) == v_ULID) {
-            std::get<1>(rented) = _reader_id;
+    for(std::tuple<std::string, int32_t> &rented_book: this->rented_books) {
+        if(std::get<0>(rented_book) == v_ULID) {
+            std::get<1>(rented_book) = _reader_id;
             return;
         }
 
     }
+    rented.close();
     rented_books.emplace_back(v_ULID, _reader_id);
+}
+
+void Library::init() {
+    this->readBooks();
+    this->readReaders();
+    this->readRented();
 }
 
 void Library::readRented() {
@@ -69,10 +77,8 @@ void Library::readRented() {
     std::string line;
     int16_t counter = 0;
     std::array<std::string, 2> rented_data;
-    if(input_file.is_open()) {
-        std::cout << "\nsuccessfully opened input file!\n";
-    } else {
-        std::cout << "\ncould not opend input file!\n";
+    if(!input_file.is_open()) {
+        std::cerr << "\ncould not opend input file!\n";
     }
 
     while(std::getline(input_file, line)) {
@@ -85,6 +91,8 @@ void Library::readRented() {
         counter = 0;
         printToRented(rented_data[0], '0');
     }
+
+    input_file.close();
 
 
 }
@@ -127,10 +135,8 @@ void Library::readReaders() {
     std::string line;
     int16_t counter = 0;
     std::array<std::string, 2> reader_data;
-    if(input_file.is_open()) {
-        std::cout << "\nsuccessfully opened input file!\n";
-    } else {
-        std::cout << "\ncould not opend input file!\n";
+    if(!input_file.is_open()) {
+        std::cerr << "\ncould not opend input file!\n";
     }
 
     while(std::getline(input_file, line)) {
@@ -142,6 +148,7 @@ void Library::readReaders() {
         this->addReader(stoi(reader_data[0]), reader_data[1]);
         counter = 0;
     }
+    input_file.close();
 }
 
 void Library::addBook(std::unique_ptr<Book> _book) {
@@ -157,10 +164,8 @@ void Library::readBooks() {
     std::string line;
     int16_t counter = 0;
     std::array<std::string, 8> book_data;
-    if(input_file.is_open()) {
-        std::cout << "\nsuccessfully opened input file!\n";
-    } else {
-        std::cout << "\ncould not opend input file!\n";
+    if(!input_file.is_open()) {
+        std::cerr << "\ncould not opend input file!\n";
     }
 
     while(std::getline(input_file, line)) {
@@ -190,5 +195,5 @@ void Library::readBooks() {
         }
         counter = 0;
     }
-
+    input_file.close();
 }
