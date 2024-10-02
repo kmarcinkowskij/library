@@ -60,7 +60,12 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
             std::get<1>(rented_book) = _reader_id;
             return;
         }
+    }
 
+    for(const std::unique_ptr<Book> &book: this->books) {
+        if(book->getULID() == v_ULID) {
+            book->setAvailability(true);
+        }
     }
     rented.close();
     rented_books.emplace_back(v_ULID, _reader_id);
@@ -124,6 +129,7 @@ void Library::removeRented(const std::string &v_ULID) {
 void Library::resetRented() {
     for(const std::unique_ptr<Book> &book: this->books) {
         printToRented(book->getULID(), '1');
+        book->setAvailability(true);
     }
     this->rented_books.clear();
     Utilities::clear_file("rented_books.csv");
@@ -163,6 +169,15 @@ std::int32_t Library::find_book_in_rented(const std::string &v_ulid) const {
         counter++;
     }
     return -1;
+}
+
+std::int32_t Library::check_book_availibility_ULID(const std::string &v_ulid) const {
+    for(const std::unique_ptr<Book> &book: this->books) {
+        if(book->getULID() == v_ulid) {
+            return book->getAvailability();
+        }
+    }
+    return 404;
 }
 
 

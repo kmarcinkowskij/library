@@ -39,6 +39,7 @@ public:
     [[nodiscard]] std::string get_reader_name_with_ID(const int32_t &v_id) const;
     [[nodiscard]] std::tuple<int32_t, std::string> find_book_with_ULID(const std::string &v_ulid) const;
     [[nodiscard]] std::int32_t find_book_in_rented(const std::string &v_ulid) const;
+    std::int32_t check_book_availibility_ULID(const std::string &v_ulid) const;
 
 };
 

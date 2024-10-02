@@ -37,13 +37,17 @@ void Control::run_lib() {
                 do {
                     std::cin >> ULID;
                     std::cin >> reader_id;
-                    if(std::get<0>(lib->find_book_with_ULID(ULID))== -1) {
+                    if(std::get<0>(lib->find_book_with_ULID(ULID)) == -1) {
                         std::cerr << "book not found, are you sure it exists?\n";
+                    }
+                    std::cout << lib->check_book_availibility_ULID(ULID) << "\n";
+                    if(lib->check_book_availibility_ULID(ULID) == 0) {
+                        std::cerr << "book marked as rented, are you sure it is availible?\n";
                     }
                     if(lib->get_reader_name_with_ID(reader_id) == "404") {
                         std::cerr << "reader not found, are you sure they exist?\n";
                     }
-                }while(std::get<0>(lib->find_book_with_ULID(ULID)) == -1 && lib->get_reader_name_with_ID(reader_id) == "404" );
+                }while(std::get<0>(lib->find_book_with_ULID(ULID)) == -1 || lib->get_reader_name_with_ID(reader_id) == "404" || lib->check_book_availibility_ULID(ULID) == 0 );
                 lib->addRented(ULID, reader_id);
                 std::cout << std::get<1>(lib->find_book_with_ULID(ULID)) << " (" << ULID << ") rented by " <<lib->get_reader_name_with_ID(reader_id) << " (" << reader_id  << ")\n";
                 break;

@@ -20,6 +20,10 @@ bool Book::getAvailability() const{
     return this->availible;
 }
 
+void Book::setAvailability(const bool &_new) {
+    this->availible = _new;
+}
+
 int32_t Book::getDate() const {
     return this->release_date;
 }

@@ -22,6 +22,7 @@ public:
     std::string getAuthor() const;
     std::string getULID() const;
     [[nodiscard]] bool getAvailability() const;
+    void setAvailability(const bool &_new);
     [[nodiscard]] int32_t getDate() const;
     virtual void showInfo();
     virtual ~Book()= default;
