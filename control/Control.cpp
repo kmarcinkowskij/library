@@ -15,15 +15,58 @@ void Control::run_lib() {
     std::string choice;
     int action_choice;
     do {
-        std::cout << "choose an action:\n \t\t1: Show all books\n\t\t2: Show all readers";
+        std::cout << "choose an action:\n \t\t1: Show all books\n\t\t2: Show all readers\n\t\t3: Show all renters\n\t\t4: Add a new renter\n\t\t5: remove a rented book\n\t\t6: reset all rented books (dangerous)\n";
         std::cin >> action_choice;
         switch(action_choice) {
             case 1: {
                 lib->getBooks();
                 break;
             }
+            case 2: {
+                lib->getReaders();
+                break;
+            }
+            case 3: {
+                lib->getRented();
+                break;
+            }
+            case 4: {
+                std::string ULID;
+                int32_t reader_id;
+                std::cout << "please input the ULID of the book in question and the ID of the reader in question";
+                do {
+                    std::cin >> ULID;
+                    std::cin >> reader_id;
+                    if(std::get<0>(lib->find_book_with_ULID(ULID))== -1) {
+                        std::cerr << "book not found, are you sure it exists?\n";
+                    }
+                    if(lib->get_reader_name_with_ID(reader_id) == "404") {
+                        std::cerr << "reader not found, are you sure they exist?\n";
+                    }
+                }while(std::get<0>(lib->find_book_with_ULID(ULID)) == -1 && lib->get_reader_name_with_ID(reader_id) == "404" );
+                lib->addRented(ULID, reader_id);
+                std::cout << std::get<1>(lib->find_book_with_ULID(ULID)) << " (" << ULID << ") rented by " <<lib->get_reader_name_with_ID(reader_id) << " (" << reader_id  << ")\n";
+                break;
+            }
+            case 5: {
+                std::string ULID;
+                std::cout << "please input the ULID of the book in question";
+                do {
+                    std::cin >> ULID;
+                    if(lib->find_book_in_rented(ULID) != -1) {
+                        std::cerr << "rented book not found, are you sure it exists?\n";
+                    }
+                }while(lib->find_book_in_rented(ULID) != -1);
+                lib->removeRented(ULID);
+                break;
+            }
+            case 6: {
+                lib->resetRented();
+                break;
+            }
             default: {
                 std::cerr << "wrong input, or an internal error has happened";
+                break;
             }
         }
         std::cout << "continue?\n";
@@ -36,15 +79,4 @@ void Control::run_lib() {
             break;
         }
     }while(Utilities::choice_map.contains(choice) && Utilities::choice_map.at(choice));
-    // lib->readBooks();
-    // lib->getBooks();
-    // lib->readReaders();
-    // lib->getReaders();
-    // lib->readRented();
-    // lib->getRented();
-    // lib->addRented("01J93NWKHY4KYEA4ZFFPY59HKS", 10);
-    // lib->removeRented("01J93NWKHXYQ7X63CHV3GQTK3M");
-    // lib->resetRented();
-    // lib->changeRented("01J93NWKHX2QQ8C4SZ3JZBXVGD", 323);
-    // std::cerr << Utilities::find_book_with_ULID("01J93NWKHXYQ7X63CHV3GQTK3M");
 }

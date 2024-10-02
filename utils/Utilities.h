@@ -24,8 +24,10 @@ public:
 
     static void change_line_in_file(const int &_line_number, const std::string &_file_dir, const std::string &_new_line);
     static void remove_line_in_file(const int &_line_number, const std::string &_file_dir);
+    static void clear_file(const std::string &_file_dir);
 
     static int32_t find_book_with_ULID(const std::string &v_ulid);
+
 
     static std::tuple<std::string, int16_t> get_string_from_index_until_delimiter(const std::string &_string, const int16_t &index, const char &_delimiter);
 };

@@ -4,7 +4,7 @@
 
 #include "Utilities.h"
 
-
+#include "../reader/Reader.h"
 
 
 Utilities::book_types Utilities::convert_string_to_book_types(const std::string &_string) {
@@ -54,6 +54,12 @@ void Utilities::remove_line_in_file(const int &_line_number, const std::string &
     std::rename("temp.csv", _file_dir.c_str());
 }
 
+void Utilities::clear_file(const std::string &_file_dir) {
+    std::ofstream new_file("temp.csv");
+    std::remove(_file_dir.c_str());
+    std::rename("temp.csv", _file_dir.c_str());
+}
+
 int32_t Utilities::find_book_with_ULID(const std::string &v_ulid) {
     std::ifstream input("books.csv");
     std::string line;
@@ -80,6 +86,7 @@ int32_t Utilities::find_book_with_ULID(const std::string &v_ulid) {
     input.close();
     return -1;
 }
+
 
 
 std::tuple<std::string, int16_t> Utilities::

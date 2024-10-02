@@ -22,13 +22,13 @@ void Library::getReaders() const {
     }
 }
 
-void Library::getRented() const {
+void Library::getRented() {
     for(auto i: rented_books) {
-        std::cout <<std::get<1>(i) << " rented " << std::get<0>(i)<<"\n";
+        std::cout <<this->get_reader_name_with_ID(std::get<1>(i)) << " (" << std::get<1>(i) << ")" << " rented " << std::get<1>(this->find_book_with_ULID(std::get<0>(i))) << " (" << std::get<0>(i) << ")\n";
     }
 }
-void printToRented(const std::string &v_ULID, const char &_current_state) {
-    int32_t line_number = Utilities::find_book_with_ULID(v_ULID);
+void Library::printToRented(const std::string &v_ULID, const char &_current_state) {
+    const int32_t line_number = std::get<0>(this->find_book_with_ULID(v_ULID));
     int32_t counter = 0;
     std::ifstream input("books.csv");
     std::string line;
@@ -52,7 +52,7 @@ void Library::addRented(const std::string &v_ULID, const int32_t &_reader_id) {
     }
     std::ofstream rented("rented_books.csv", std::ios_base::app);
     printToRented(v_ULID, '0');
-    rented << v_ULID + ',' + std::to_string(_reader_id);
+    rented << v_ULID + ',' + std::to_string(_reader_id) + '\n';
     rented.close();
 
     for(std::tuple<std::string, int32_t> &rented_book: this->rented_books) {
@@ -126,7 +126,43 @@ void Library::resetRented() {
         printToRented(book->getULID(), '1');
     }
     this->rented_books.clear();
+    Utilities::clear_file("rented_books.csv");
 
+}
+
+std::string Library::get_reader_name_with_ID(const int32_t &v_id) const {
+        for(const Reader& reader: this->readers) {
+            if(reader.getReaderID() == v_id) {
+                return reader.getReaderName();
+            }
+        }
+        return "404";
+}
+
+std::tuple<int32_t, std::string> Library::find_book_with_ULID(const std::string &v_ulid) const {
+    int32_t counter = 0;
+    try {
+        for(const std::unique_ptr<Book> &book: this->books) {
+            if(book->getULID() == v_ulid) {
+                return {counter, book->getTitle()};
+            }
+            counter++;
+        }
+    }catch(int err_code) {
+        return {err_code, std::to_string(err_code)};
+    }
+    return {-1, "null"};
+}
+
+std::int32_t Library::find_book_in_rented(const std::string &v_ulid) const {
+    int32_t counter = 0;
+    for(const std::tuple<std::string, int32_t> &rented: this->rented_books) {
+        if(std::get<0>(rented) == v_ulid) {
+            return counter;
+        }
+        counter++;
+    }
+    return -1;
 }
 
 
